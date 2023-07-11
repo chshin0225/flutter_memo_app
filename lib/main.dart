@@ -5,7 +5,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -16,13 +16,18 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'My Memos'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const MemoListPage(title: 'My Memos'),
+        '/create': (context) => const MemoCreatePage(title: 'Create Memo'),
+        '/detail': (context) => const MemoDetailPage(title: 'Memo'),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class MemoListPage extends StatefulWidget {
+  const MemoListPage({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -36,22 +41,11 @@ class MyHomePage extends StatefulWidget {
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MemoListPage> createState() => _MemoListPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class _MemoListPageState extends State<MemoListPage> {
+  List<String> memos = [];
 
   @override
   Widget build(BuildContext context) {
@@ -66,50 +60,160 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(8),
-        children: <Widget>[
-          Card(
+      body: ListView.builder(
+        itemCount: memos.length,
+        itemBuilder: (context, index) {
+          return Card(
             color: Colors.blue[50],
-            child: const ListTile(
-              title: Text('item 1', style: TextStyle(fontSize: 22),),
-              subtitle: Text('item 1 content'),
-              trailing: Icon(Icons.more_vert),
+            child: ListTile(
+              title: Text(memos[index], style: TextStyle(fontSize: 22),),
             ),
-          ),
-          Card(
-            color: Colors.blue[100],
-            child: const ListTile(
-              title: Text('item 2', style: TextStyle(fontSize: 22),),
-              subtitle: Text('item 2 content'),
-              trailing: Icon(Icons.more_vert),
-            ),
-          ),
-          Card(
-            color: Colors.blue[200],
-            child: const ListTile(
-              title: Text('item 3', style: TextStyle(fontSize: 22),),
-              subtitle: Text('item 3 content'),
-              trailing: Icon(Icons.more_vert),
-            ),
-          ),
-          Card(
-            color: Colors.blue[300],
-            child: const ListTile(
-              title: Text('item 4', style: TextStyle(fontSize: 22),),
-              subtitle: Text('item 4 content'),
-              trailing: Icon(Icons.more_vert),
-            ),
-          ),
-        ],
+          );
+        },
       ),
+      // body: ListView(
+      //   padding: const EdgeInsets.all(8),
+      //   children: <Widget>[
+      //     Card(
+      //       color: Colors.blue[50],
+      //       child: const ListTile(
+      //         title: Text('item 1', style: TextStyle(fontSize: 22),),
+      //         subtitle: Text('item 1 content'),
+      //         trailing: Icon(Icons.more_vert),
+      //       ),
+      //     ),
+      //     Card(
+      //       color: Colors.blue[100],
+      //       child: const ListTile(
+      //         title: Text('item 2', style: TextStyle(fontSize: 22),),
+      //         subtitle: Text('item 2 content'),
+      //         trailing: Icon(Icons.more_vert),
+      //       ),
+      //     ),
+      //     Card(
+      //       color: Colors.blue[200],
+      //       child: const ListTile(
+      //         title: Text('item 3', style: TextStyle(fontSize: 22),),
+      //         subtitle: Text('item 3 content'),
+      //         trailing: Icon(Icons.more_vert),
+      //       ),
+      //     ),
+      //     Card(
+      //       color: Colors.blue[300],
+      //       child: const ListTile(
+      //         title: Text('item 4', style: TextStyle(fontSize: 22),),
+      //         subtitle: Text('item 4 content'),
+      //         trailing: Icon(Icons.more_vert),
+      //       ),
+      //     ),
+      //   ],
+      // ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          // Navigator.pushNamed(context, '/create');
+          _addMemo(context);
         },
         backgroundColor: Colors.blue[700],
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  void _addMemo(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String newMemo = '';
+        return AlertDialog(
+          title: const Text('Add Memo'),
+          content: TextField(
+            onChanged: (value) {
+              newMemo = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  memos.add(newMemo);
+                });
+                Navigator.pop(context);
+              },
+              child: const Text('Add'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class MemoDetailPage extends StatefulWidget {
+  const MemoDetailPage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MemoDetailPage> createState() => _MemoDetailPageState();
+}
+
+class _MemoDetailPageState extends State<MemoDetailPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+    );
+  }
+}
+
+class MemoCreatePage extends StatefulWidget {
+  const MemoCreatePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  State<MemoCreatePage> createState() => _MemoCreatePageState();
+}
+
+class _MemoCreatePageState extends State<MemoCreatePage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: const Center(
+        child: Column(
+          children: [
+            SizedBox(
+              width: 300,
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Title',
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 300,
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Content',
+                ),
+              ),
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //   },
+            //   child: Text('create memo'),
+            // ),
+          ],
+        ),
+      ),
+      
     );
   }
 }

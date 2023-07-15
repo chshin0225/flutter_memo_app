@@ -1,16 +1,31 @@
-# memo_app
+# A simple memo app
+[![forthebadge](./readme/made-with-flutter.svg)](https://forthebadge.com)
 
-A new Flutter project.
+A simple memo app that lets you add short reminders. 
 
-## Getting Started
+ ![image](./readme/memo_overview.gif)
 
-This project is a starting point for a Flutter application.
+# Features
 
-A few resources to get you started if this is your first Flutter project:
+- Add post-it notes. The color of the post-it note is randomly chosen.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+  ![image](./readme/add_memo.gif)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Delete post-it note when the task is finished
+
+  ![image](./readme/delete_memo.gif)
+
+# Installation
+1. Install Flutter (preferably, version >= 3.10.2)
+2. Clone this repository
+
+    ```bash
+    git clone https://github.com/chshin0225/flutter_memo_app.git
+    ```
+
+3. Run the project
+    ```bash
+    flutter run
+    ```
+
+

@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       title: 'Memo app',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        fontFamily: 'Gaegu',
         useMaterial3: true,
       ),
       initialRoute: '/',
@@ -144,7 +145,7 @@ class _MemoListPageState extends State<MemoListPage> {
 
                 Navigator.pop(context);
               },
-              child: const Text('Add'),
+              child: const Text('Add', style: TextStyle(fontSize: 24),),
             ),
           ],
         );
